@@ -1,0 +1,38 @@
+export const cartProducts = [
+  {
+    id: '1',
+    name: 'product1',
+    category: 'cat1',
+    image: '',
+    price: 100,
+    description: 'product1',
+    quantity: 1,
+  },
+  {
+    id: '2',
+    name: 'product2',
+    category: 'cat2',
+    image: '',
+    price: 150,
+    description: 'product2',
+    quantity: 2,
+  },
+  {
+    id: '3',
+    name: 'product3',
+    category: 'cat3',
+    image: '',
+    price: 200,
+    description: 'product3',
+    quantity: 3,
+  },
+  {
+    id: '4',
+    name: 'product4',
+    category: 'cat1',
+    image: '',
+    price: 50,
+    description: 'product4',
+    quantity: 1,
+  },
+];
