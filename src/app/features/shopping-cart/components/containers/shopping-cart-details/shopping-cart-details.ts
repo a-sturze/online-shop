@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { cartProducts } from '../../../../../mocks/cart';
 
 @Component({
@@ -6,6 +6,7 @@ import { cartProducts } from '../../../../../mocks/cart';
   selector: 'app-shopping-cart-details',
   templateUrl: './shopping-cart-details.html',
   styleUrl: './shopping-cart-details.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetails {
   data = cartProducts;

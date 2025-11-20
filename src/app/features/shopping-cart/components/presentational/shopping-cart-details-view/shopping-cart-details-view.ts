@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Product } from '../../../../../types/products';
 
 @Component({
@@ -6,6 +6,7 @@ import { Product } from '../../../../../types/products';
   selector: 'app-shopping-cart-details-view',
   templateUrl: './shopping-cart-details-view.html',
   styleUrl: './shopping-cart-details-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetailsView {
   @Input({ required: true })

@@ -26,7 +26,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
-      <button matIconButton aria-label="Details" (click)="handleDetails(element.id)">
+      <button matIconButton aria-label="Details" [routerLink]="['/details/', element.id]">
         <mat-icon>arrow_forward_ios</mat-icon>
       </button>
     </td>

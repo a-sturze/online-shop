@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { product } from '../../../mocks/products';
 
@@ -7,6 +7,7 @@ import { product } from '../../../mocks/products';
   imports: [ProductsDetailsView],
   templateUrl: './products-details.html',
   styleUrl: './products-details.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsDetails {
   product = product;

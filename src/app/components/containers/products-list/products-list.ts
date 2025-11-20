@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { products } from '../../../mocks/products';
 import { ProductsListView } from '../../presentational/products-list-view/products-list-view';
 
@@ -7,6 +7,7 @@ import { ProductsListView } from '../../presentational/products-list-view/produc
   imports: [ProductsListView],
   templateUrl: './products-list.html',
   styleUrl: './products-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsList {
   protected data = products;

@@ -5,10 +5,17 @@ import { ShoppingCartDetailsView } from './components/presentational/shopping-ca
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { RouterModule } from '@angular/router';
+import { shoppingCartRoutes } from './shopping-cart-routes';
 
 @NgModule({
   declarations: [ShoppingCartDetails, ShoppingCartDetailsView],
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule],
-  exports: [ShoppingCartDetails, ShoppingCartDetailsView],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(shoppingCartRoutes),
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
 })
 export class ShoppingCartModule {}
