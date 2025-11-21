@@ -1,18 +1,20 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Product } from '../../../../../types/products';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
-  standalone: false,
   selector: 'app-shopping-cart-details-view',
+  imports: [MatTableModule, MatButtonModule, MatIconModule],
   templateUrl: './shopping-cart-details-view.html',
   styleUrl: './shopping-cart-details-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetailsView {
-  @Input({ required: true })
-  data: Product[] = [];
+  data = input.required<Product[]>();
 
-  protected displayedColumns = ['category', 'name', 'price', 'quantity', 'actions'];
+  protected readonly displayedColumns = ['category', 'name', 'price', 'quantity', 'actions'];
 
   handleDelete = (id: string) => {
     console.log(id);

@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { product } from '../../../mocks/products';
+import { Product } from '../../../types/products';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products-details',
@@ -10,5 +12,12 @@ import { product } from '../../../mocks/products';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsDetails {
-  product = product;
+  route = inject(ActivatedRoute);
+
+  protected readonly product: Product = product;
+
+  ngOnInit() {
+    const productId = this.route.snapshot.paramMap.get('id');
+    console.log(productId);
+  }
 }
