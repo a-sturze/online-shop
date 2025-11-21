@@ -7,10 +7,8 @@ export const routes: Routes = [
   { path: 'products/details/:id', component: ProductsDetails },
   {
     path: 'cart',
-    loadComponent: () =>
-      import(
-        './features/shopping-cart/components/containers/shopping-cart-details/shopping-cart-details'
-      ).then((m) => m.ShoppingCartDetails),
+    loadChildren: () =>
+      import('./features/shopping-cart/shopping-cart-routes').then((m) => m.shoppingCartRoutes),
   },
   { path: '**', redirectTo: 'products' },
 ];

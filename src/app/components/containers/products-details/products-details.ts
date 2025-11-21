@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsDetails {
-  route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly product: Product = product;
 
