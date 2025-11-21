@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { product } from '../../../mocks/products';
 import { Product } from '../../../types/products';
