@@ -10,5 +10,5 @@ import { ProductsListView } from '../../presentational/products-list-view/produc
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsList {
-  protected data = products;
+  protected readonly data = products;
 }

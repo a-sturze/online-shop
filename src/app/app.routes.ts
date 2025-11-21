@@ -3,12 +3,12 @@ import { ProductsList } from './components/containers/products-list/products-lis
 import { ProductsDetails } from './components/containers/products-details/products-details';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', component: ProductsList },
-  { path: 'details/:id', component: ProductsDetails },
+  { path: 'products', pathMatch: 'full', component: ProductsList },
+  { path: 'products/details/:id', component: ProductsDetails },
   {
     path: 'cart',
     loadChildren: () =>
-      import('./features/shopping-cart/shopping-cart-module').then((m) => m.ShoppingCartModule),
+      import('./features/shopping-cart/shopping-cart-routes').then((m) => m.shoppingCartRoutes),
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: 'products' },
 ];

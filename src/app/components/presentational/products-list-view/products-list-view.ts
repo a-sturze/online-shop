@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Product } from '../../../types/products';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,8 +13,9 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsListView {
-  @Input({ required: true })
-  data: Product[] = [];
+  data = input.required<Product[]>();
 
-  protected displayedColumns = ['category', 'name', 'price', 'actions'];
+  protected readonly displayedColumns = ['category', 'name', 'price', 'actions'];
+
+  addToCart = () => {};
 }

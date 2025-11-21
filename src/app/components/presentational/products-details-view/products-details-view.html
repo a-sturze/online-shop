@@ -1,20 +1,20 @@
 <div class="flex justify-between py-2">
-  <h2 class="text-xl font-bold">Product: {{ product.name }}</h2>
+  <h2 class="text-xl font-bold">Product: {{ product().name }}</h2>
   <div class="flex gap-2">
     <button matButton="tonal">Edit</button> <button matButton="filled">Delete</button>
   </div>
 </div>
 <div class="grid grid-cols-4 gap-x-4 gap-y-2">
   <span class="text-gray-500 text-end">Name</span>
-  <span>{{ product.name }}</span>
+  <span>{{ product().name }}</span>
 
   <span class="col-span-2 row-span-3 flex justify-end"
-    ><img class="h-20" [src]="product.image" [alt]="product.name"
+    ><img class="h-20" [src]="product().image" [alt]="product().name"
   /></span>
   <span class="text-gray-500 text-end">Category</span>
-  <span>{{ product.category }}</span>
+  <span>{{ product().category }}</span>
   <span class="text-gray-500 text-end">Price</span>
-  <span>{{ product.price }} RON</span>
+  <span>{{ product().price }} RON</span>
   <span class="text-gray-500 text-end">Description</span>
-  <span class="col-span-3">{{ product.description }}</span>
+  <span class="col-span-3">{{ product().description }}</span>
 </div>
