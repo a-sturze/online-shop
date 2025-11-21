@@ -1,7 +1,7 @@
 <div class="flex justify-between">
   <h1 class="text-xl font-bold">Shopping Cart</h1>
   <div class="flex gap-2">
-    <button matButton="tonal">Checkout</button>
+    <button matButton="tonal" (click)="checkout.emit()">Checkout</button>
   </div>
 </div>
 <table mat-table [dataSource]="data()" class="mat-elevation-z8">

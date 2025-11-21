@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { cartProducts } from '../../../../../mocks/cart';
 import { ShoppingCartDetailsView } from '../../presentational/shopping-cart-details-view/shopping-cart-details-view';
 import { CartProduct } from '../../../../shared/types/product';
+import { ShoppingCartService } from '../../../../services/shopping-cart';
 
 @Component({
   selector: 'app-shopping-cart-details',
@@ -11,5 +12,10 @@ import { CartProduct } from '../../../../shared/types/product';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetails {
-  data: CartProduct[] = cartProducts;
+  protected readonly data: CartProduct[] = cartProducts;
+  private readonly cartService = inject(ShoppingCartService);
+
+  checkout() {
+    this.cartService.checkout().subscribe((data) => {});
+  }
 }

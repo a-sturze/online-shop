@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Product } from '../../../types/products';
 
@@ -11,4 +11,5 @@ import { Product } from '../../../types/products';
 })
 export class ProductsDetailsView {
   product = input.required<Product>();
+  deleteProduct = output<void>();
 }
