@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Product } from '../types/products';
 import { environment } from '../../environments/environment';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,6 @@ export class ProductsClientService {
   }
 
   deleteProduct(id: string) {
-    return this.http.delete(this.BASE_URL + `/productss/${id}`);
+    return this.http.delete(this.BASE_URL + `/products/${id}`);
   }
 }

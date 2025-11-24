@@ -1,15 +1,17 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { inject, Injectable, Signal, signal } from '@angular/core';
 import { ShoppingCartClientService } from './shopping-cart-client';
+import { take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
   private readonly clientService = inject(ShoppingCartClientService);
-  public readonly hasError = signal<boolean>(false);
+  private readonly _hasError = signal<boolean>(false);
 
+  public get hasError(): Signal<boolean> {
+    return this._hasError.asReadonly();
+  }
   checkout() {
     const order = {
       customerId: 'de96921d-2f8d-46e7-8061-31468180de96',
@@ -20,11 +22,14 @@ export class ShoppingCartService {
         },
       ],
     };
-    return this.clientService.checkout(order).subscribe({
-      next: () => {
-        this.hasError.set(false);
-      },
-      error: () => this.hasError.set(true),
-    });
+    return this.clientService
+      .checkout(order)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this._hasError.set(false);
+        },
+        error: () => this._hasError.set(true),
+      });
   }
 }

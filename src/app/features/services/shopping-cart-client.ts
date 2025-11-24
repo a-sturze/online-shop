@@ -11,6 +11,6 @@ export class ShoppingCartClientService {
   private readonly BASE_URL = environment.apiUrl;
 
   checkout(order: Order) {
-    return this.http.post(`${this.BASE_URL}/orderss`, order);
+    return this.http.post(`${this.BASE_URL}/orders`, order);
   }
 }
