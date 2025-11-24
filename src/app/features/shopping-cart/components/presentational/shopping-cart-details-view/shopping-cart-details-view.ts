@@ -12,8 +12,8 @@ import { MatTableModule } from '@angular/material/table';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetailsView {
-  data = input.required<Product[]>();
-  checkout = output<void>();
+  public readonly data = input.required<Product[]>();
+  public readonly checkout = output<void>();
 
   protected readonly displayedColumns = ['category', 'name', 'price', 'quantity', 'actions'];
 

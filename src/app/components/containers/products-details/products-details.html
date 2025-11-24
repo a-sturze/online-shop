@@ -1,5 +1,3 @@
-@if (product(); as product){<app-products-details-view
-  [product]="product"
-  (deleteProduct)="deleteProduct()"
-/>
+@if (productService.product(); as product){
+<app-products-details-view [product]="product" (deleteProduct)="deleteProduct()" />
 }

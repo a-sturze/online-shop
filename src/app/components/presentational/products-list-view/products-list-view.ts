@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsListView {
-  data = input.required<Product[]>();
+  public readonly data = input.required<Product[]>();
 
   protected readonly displayedColumns = ['category', 'name', 'price', 'actions'];
 

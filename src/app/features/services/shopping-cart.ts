@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { ShoppingCartClientService } from './shopping-cart-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
-  private readonly http = inject(HttpClient);
-  private readonly BASE_URL = environment.apiUrl;
+  private readonly clientService = inject(ShoppingCartClientService);
+  public readonly hasError = signal<boolean>(false);
 
   checkout() {
     const order = {
@@ -19,6 +20,11 @@ export class ShoppingCartService {
         },
       ],
     };
-    return this.http.post(`${this.BASE_URL}/orders`, order);
+    return this.clientService.checkout(order).subscribe({
+      next: () => {
+        this.hasError.set(false);
+      },
+      error: () => this.hasError.set(true),
+    });
   }
 }

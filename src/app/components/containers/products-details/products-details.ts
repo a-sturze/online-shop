@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../../services/products';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-products-details',
@@ -13,15 +13,25 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class ProductsDetails {
   private readonly route = inject(ActivatedRoute);
-  private readonly productService = inject(ProductsService);
   private readonly router = inject(Router);
+  protected readonly productService = inject(ProductsService);
   protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
+  private _snackBar = inject(MatSnackBar);
 
-  protected readonly product = toSignal(this.productService.getProductDetails(this.productId));
+  constructor() {
+    effect(() => {
+      if (this.productService.hasError()) {
+        this._snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
+      }
+    });
+  }
+  ngOnInit() {
+    this.productService.getProductDetails(this.productId);
+  }
 
   deleteProduct() {
-    this.productService.deleteProduct(this.productId).subscribe((data) => {
-      this.router.navigate(['/products']);
-    });
+    this.productService
+      .deleteProduct(this.productId)
+      .subscribe(() => this.router.navigate(['/products']));
   }
 }

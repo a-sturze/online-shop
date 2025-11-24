@@ -1,16 +1,29 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { ProductsListView } from '../../presentational/products-list-view/products-list-view';
 import { ProductsService } from '../../../services/products';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-products-list',
-  imports: [ProductsListView],
+  imports: [ProductsListView, FormsModule],
   templateUrl: './products-list.html',
   styleUrl: './products-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsList {
-  private readonly productService = inject(ProductsService);
-  protected readonly data = toSignal(this.productService.getProducts(), { initialValue: [] });
+  protected readonly productService = inject(ProductsService);
+  private _snackBar = inject(MatSnackBar);
+
+  constructor() {
+    effect(() => {
+      if (this.productService.hasError()) {
+        this._snackBar.open('Could not load products', 'Close', { verticalPosition: 'top' });
+      }
+    });
+  }
+
+  ngOnInit() {
+    this.productService.getProducts();
+  }
 }

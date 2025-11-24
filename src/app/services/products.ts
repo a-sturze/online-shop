@@ -1,25 +1,53 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Product } from '../types/products';
-import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { ProductsClientService } from './products-client';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private readonly http = inject(HttpClient);
-  private readonly BASE_URL = environment.apiUrl;
+  private readonly clientService = inject(ProductsClientService);
+  public readonly products = signal<Product[] | null>(null);
+  public readonly product = signal<Product | null>(null);
+  public readonly hasError = signal<boolean>(false);
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.BASE_URL + '/products');
+  public getProducts() {
+    if (this.products()) {
+      return;
+    }
+    this.clientService.getProducts().subscribe({
+      next: (products) => {
+        this.products.set(products);
+        this.hasError.set(false);
+      },
+      error: () => this.hasError.set(true),
+    });
   }
 
-  getProductDetails(id: string): Observable<Product> {
-    return this.http.get<Product>(this.BASE_URL + `/products/${id}`);
+  getProductDetails(id: string) {
+    this.clientService.getProductDetails(id).subscribe({
+      next: (product) => {
+        this.product.set(product);
+        this.hasError.set(false);
+      },
+      error: () => this.hasError.set(true),
+    });
   }
 
   deleteProduct(id: string) {
-    return this.http.delete(this.BASE_URL + `/products/${id}`);
+    return this.clientService.deleteProduct(id).pipe(
+      tap({
+        next: () => {
+          this.product.set(null);
+          this.hasError.set(false);
+          const products = this.products();
+          if (products) {
+            this.products.set(products.filter((p) => p.id !== id));
+          }
+        },
+        error: () => this.hasError.set(true),
+      })
+    );
   }
 }
