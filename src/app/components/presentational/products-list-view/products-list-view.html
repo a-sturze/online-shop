@@ -4,7 +4,7 @@
     <button matMiniFab aria-label="Details" routerLink="/cart">
       <mat-icon>shopping_cart</mat-icon>
     </button>
-    <button matButton="tonal" (click)="addToCart()">Add</button>
+    <button matButton="tonal" routerLink="/products/add">Add</button>
   </div>
 </div>
 <table mat-table [dataSource]="data()" class="mat-elevation-z8">

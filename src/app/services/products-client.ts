@@ -19,6 +19,14 @@ export class ProductsClientService {
     return this.http.get<Product>(this.BASE_URL + `/products/${id}`);
   }
 
+  editProduct(product: Product) {
+    return this.http.put(this.BASE_URL + `/products/${product.id}`, product);
+  }
+
+  createProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.BASE_URL + `/products`, product);
+  }
+
   deleteProduct(id: string) {
     return this.http.delete(this.BASE_URL + `/products/${id}`);
   }

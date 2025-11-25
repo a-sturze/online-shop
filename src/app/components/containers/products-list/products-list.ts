@@ -13,12 +13,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ProductsList {
   protected readonly productService = inject(ProductsService);
-  private _snackBar = inject(MatSnackBar);
+  private snackBar = inject(MatSnackBar);
 
   constructor() {
     effect(() => {
       if (this.productService.hasError()) {
-        this._snackBar.open('Could not load products', 'Close', { verticalPosition: 'top' });
+        this.snackBar.open('Could not load products', 'Close', { verticalPosition: 'top' });
       }
     });
   }

@@ -1,7 +1,7 @@
 <div class="flex justify-between py-2">
   <h2 class="text-xl font-bold">Product: {{ product().name }}</h2>
   <div class="flex gap-2">
-    <button matButton="tonal">Edit</button>
+    <button matButton="tonal" [routerLink]="['/products/edit/', product().id]">Edit</button>
     <button matButton="filled" (click)="openDialog.emit()">Delete</button>
   </div>
 </div>
