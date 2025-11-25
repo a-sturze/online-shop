@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ShoppingCartDetails {
   protected readonly data: CartProduct[] = cartProducts;
   private readonly cartService = inject(ShoppingCartService);
-  private _snackBar = inject(MatSnackBar);
+  private readonly _snackBar = inject(MatSnackBar);
 
   constructor() {
     effect(() => {

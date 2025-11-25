@@ -6,7 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../../presentational/delete-dialog/delete-dialog';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'app-products-details',
@@ -20,9 +19,9 @@ export class ProductsDetails {
   private readonly router = inject(Router);
   protected readonly productService = inject(ProductsService);
   protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
-  private _snackBar = inject(MatSnackBar);
-  private destroyRef = inject(DestroyRef);
-  readonly dialog = inject(MatDialog);
+  private readonly _snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly dialog = inject(MatDialog);
 
   constructor() {
     effect(() => {
@@ -50,7 +49,7 @@ export class ProductsDetails {
 
     dialogRef
       .afterClosed()
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result !== undefined) {
           this.deleteProduct();

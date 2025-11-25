@@ -50,6 +50,38 @@ export class ProductsService {
       });
   }
 
+  editProduct(product: Product) {
+    return this.clientService.editProduct(product).pipe(
+      tap({
+        next: () => {
+          this._product.set(product);
+          this._hasError.set(false);
+          const products = this._products();
+          if (products) {
+            this._products.set(products.map((p) => (p.id === product.id ? product : p)));
+          }
+        },
+        error: () => this._hasError.set(true),
+      })
+    );
+  }
+
+  createProduct(product: Product) {
+    return this.clientService.createProduct(product).pipe(
+      tap({
+        next: (reponse: Product) => {
+          this._product.set(reponse);
+          this._hasError.set(false);
+          const products = this._products();
+          if (products) {
+            this._products.update((current) => [...current, reponse]);
+          }
+        },
+        error: () => this._hasError.set(true),
+      })
+    );
+  }
+
   deleteProduct(id: string) {
     return this.clientService.deleteProduct(id).pipe(
       tap({

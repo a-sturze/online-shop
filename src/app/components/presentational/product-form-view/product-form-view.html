@@ -1,0 +1,68 @@
+<h2 class="text-xl font-bold text-center">
+  {{ title() }}
+</h2>
+<form class="py-3" [formGroup]="form()">
+  <div class="w-1/2 flex justify-center justify-self-center flex-col">
+    <mat-form-field>
+      <mat-label for="name">Name</mat-label>
+      <input id="name" matInput type="text" placeholder="Name" formControlName="name" />
+      @if (form().controls['name'].errors) {
+      <mat-error>Name is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="category">Category</mat-label>
+      <input
+        id="category"
+        matInput
+        type="text"
+        placeholder="Category"
+        formControlName="category"
+      />@if (form().controls['category'].errors) {
+      <mat-error>Category is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="image">Image</mat-label>
+      <input
+        id="image"
+        matInput
+        placeholder="http://example.com/image.png"
+        formControlName="image"
+      />@if (form().controls['image'].errors) {
+      <mat-error>Image is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="price">Price</mat-label>
+      <input id="price" matInput type="number" placeholder="Price" formControlName="price" />@if
+      (form().controls['price'].errors) {
+      <mat-error>Price must be a positive number</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="description">Description</mat-label>
+      <textarea
+        id="description"
+        matInput
+        type="text"
+        placeholder="Description"
+        formControlName="description"
+      ></textarea
+      >@if (form().controls['description'].errors) {
+      <mat-error>Description is required</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="flex justify-around">
+    <button type="button" matButton="tonal" (click)="handleCancel.emit()">Cancel</button>
+    <button
+      type="submit"
+      matButton="filled"
+      (click)="saveProduct.emit()"
+      [disabled]="!form().valid"
+    >
+      Save
+    </button>
+  </div>
+</form>

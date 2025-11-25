@@ -1,0 +1,6 @@
+<app-product-form-view
+  [title]="mode === 'edit'? `Edit  ${productService.product()?.name}`: 'Add Product'"
+  [(form)]="productForm"
+  (saveProduct)="saveProduct()"
+  (handleCancel)="handleCancel()"
+/>
