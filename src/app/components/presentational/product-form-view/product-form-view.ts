@@ -1,4 +1,4 @@
-import { Component, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { MatButton } from '@angular/material/button';
   imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButton],
   templateUrl: './product-form-view.html',
   styleUrl: './product-form-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFormView {
   public readonly title = input.required<string>();

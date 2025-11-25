@@ -15,12 +15,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ShoppingCartDetails {
   protected readonly data: CartProduct[] = cartProducts;
   private readonly cartService = inject(ShoppingCartService);
-  private readonly _snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     effect(() => {
       if (this.cartService.hasError()) {
-        this._snackBar.open('Could not place order', 'Close', { verticalPosition: 'top' });
+        this.snackBar.open('Could not place order', 'Close', { verticalPosition: 'top' });
       }
     });
   }

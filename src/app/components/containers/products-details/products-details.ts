@@ -19,14 +19,14 @@ export class ProductsDetails {
   private readonly router = inject(Router);
   protected readonly productService = inject(ProductsService);
   protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
-  private readonly _snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
 
   constructor() {
     effect(() => {
       if (this.productService.hasError()) {
-        this._snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
+        this.snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
       }
     });
   }

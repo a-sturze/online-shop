@@ -1,48 +1,51 @@
-import { Component, DestroyRef, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+} from '@angular/core';
 import { ProductFormView } from '../../presentational/product-form-view/product-form-view';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../../services/products';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup } from '@angular/forms';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { createProductForm, FormMode } from './utils/form.utils';
 
 @Component({
   selector: 'app-product-form',
   imports: [ProductFormView],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductForm {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly _snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly productService = inject(ProductsService);
-  protected productId = this.route.snapshot.paramMap.get('id');
-  protected mode = this.productId ? 'edit' : 'add';
+  protected readonly productId = toSignal(this.route.paramMap.pipe(map((p) => p.get('id'))));
+  protected readonly mode = computed(() => (this.productId() ? FormMode.Edit : FormMode.Add));
+  protected readonly title = computed(() =>
+    this.mode() === FormMode.Edit ? `Edit  ${this.productService.product()?.name}` : 'Add Product'
+  );
 
-  protected readonly productForm: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    category: new FormControl('', [Validators.required]),
-    price: new FormControl(0, [
-      Validators.required,
-      Validators.min(0),
-      Validators.pattern('^[0-9]*$'),
-    ]),
-    image: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-  });
+  protected readonly productForm: FormGroup = createProductForm();
 
   constructor() {
     effect(() => {
       if (this.productService.hasError()) {
-        this._snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
+        this.snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
       }
     });
 
     effect(() => {
-      if (this.mode === 'edit' && this.productId) {
+      if (this.mode() === FormMode.Edit && this.productId()) {
         const product = this.productService.product();
         if (product) {
           this.productForm.patchValue({
@@ -58,24 +61,25 @@ export class ProductForm {
   }
 
   ngOnInit() {
-    if (this.mode === 'edit' && this.productId)
-      this.productService.getProductDetails(this.productId);
+    const productId = this.productId();
+    if (this.mode() === FormMode.Edit && productId)
+      this.productService.getProductDetails(productId);
   }
 
   saveProduct() {
     if (!this.productForm.valid) {
-      this._snackBar.open('The information entered is not correct', 'Close', {
+      this.snackBar.open('The information entered is not correct', 'Close', {
         verticalPosition: 'top',
       });
       return;
     }
-    if (this.mode === 'edit' && this.productId) {
-      const newProduct = { id: this.productId, ...this.productForm.value };
+    if (this.mode() === FormMode.Edit && this.productId()) {
+      const newProduct = { id: this.productId(), ...this.productForm.value };
       this.productService
         .editProduct(newProduct)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
-          this.router.navigate([`/products/details/${this.productId}`]);
+          this.router.navigate([`/products/details/${this.productId()}`]);
         });
     } else {
       this.productService
@@ -88,8 +92,8 @@ export class ProductForm {
   }
 
   handleCancel() {
-    if (this.mode === 'edit' && this.productId) {
-      this.router.navigate([`/products/details/${this.productId}`]);
+    if (this.mode() === FormMode.Edit && this.productId()) {
+      this.router.navigate([`/products/details/${this.productId()}`]);
     } else {
       this.router.navigate(['/products']);
     }

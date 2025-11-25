@@ -35,8 +35,14 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label for="price">Price</mat-label>
-      <input id="price" matInput type="number" placeholder="Price" formControlName="price" />@if
-      (form().controls['price'].errors) {
+      <input
+        id="price"
+        matInput
+        type="number"
+        min="1"
+        placeholder="Price"
+        formControlName="price"
+      />@if (form().controls['price'].errors) {
       <mat-error>Price must be a positive number</mat-error>
       }
     </mat-form-field>
