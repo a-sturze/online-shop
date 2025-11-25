@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../../presentational/delete-dialog/delete-dialog';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-products-details',
@@ -47,10 +48,13 @@ export class ProductsDetails {
       data: { product: this.productService.product()?.name || '' },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined) {
-        this.deleteProduct();
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result !== undefined) {
+          this.deleteProduct();
+        }
+      });
   }
 }
