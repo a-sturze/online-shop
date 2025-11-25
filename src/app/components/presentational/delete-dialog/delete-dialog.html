@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Delete Product</h2>
+<mat-dialog-content>
+  Are you sure you want to remove the <span class="italic">{{ product() }}</span> product?
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="handleCancel()">Cancel</button>
+  <button matButton="filled" [mat-dialog-close]="product()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

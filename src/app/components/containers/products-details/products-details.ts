@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
-import { product } from '../../../mocks/products';
-import { Product } from '../../../types/products';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductsService } from '../../../services/products';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialog } from '../../presentational/delete-dialog/delete-dialog';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-products-details',
@@ -13,11 +17,44 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductsDetails {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  protected readonly productService = inject(ProductsService);
+  protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
+  private _snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
+  readonly dialog = inject(MatDialog);
 
-  protected readonly product: Product = product;
-
+  constructor() {
+    effect(() => {
+      if (this.productService.hasError()) {
+        this._snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' });
+      }
+    });
+  }
   ngOnInit() {
-    const productId = this.route.snapshot.paramMap.get('id');
-    console.log(productId);
+    this.productService.getProductDetails(this.productId);
+  }
+
+  deleteProduct() {
+    this.productService
+      .deleteProduct(this.productId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.router.navigate(['/products']));
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DeleteDialog, {
+      width: '250px',
+      data: { product: this.productService.product()?.name || '' },
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe((result) => {
+        if (result !== undefined) {
+          this.deleteProduct();
+        }
+      });
   }
 }

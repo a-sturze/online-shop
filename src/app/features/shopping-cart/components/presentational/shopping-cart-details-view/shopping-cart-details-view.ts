@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Product } from '../../../../../types/products';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,7 +12,8 @@ import { MatTableModule } from '@angular/material/table';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetailsView {
-  data = input.required<Product[]>();
+  public readonly data = input.required<Product[]>();
+  public readonly checkout = output<void>();
 
   protected readonly displayedColumns = ['category', 'name', 'price', 'quantity', 'actions'];
 

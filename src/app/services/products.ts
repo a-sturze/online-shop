@@ -1,0 +1,68 @@
+import { inject, Injectable, Signal, signal } from '@angular/core';
+import { Product } from '../types/products';
+import { ProductsClientService } from './products-client';
+import { take, tap } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ProductsService {
+  private readonly clientService = inject(ProductsClientService);
+  private readonly _products = signal<Product[]>([]);
+  private readonly _product = signal<Product | null>(null);
+  private readonly _hasError = signal<boolean>(false);
+
+  public get products(): Signal<Product[]> {
+    return this._products.asReadonly();
+  }
+
+  public get product(): Signal<Product | null> {
+    return this._product.asReadonly();
+  }
+
+  public get hasError(): Signal<boolean> {
+    return this._hasError.asReadonly();
+  }
+
+  public getProducts() {
+    this.clientService
+      .getProducts()
+      .pipe(take(1))
+      .subscribe({
+        next: (products) => {
+          this._products.set(products);
+          this._hasError.set(false);
+        },
+        error: () => this._hasError.set(true),
+      });
+  }
+
+  getProductDetails(id: string) {
+    this.clientService
+      .getProductDetails(id)
+      .pipe(take(1))
+      .subscribe({
+        next: (product) => {
+          this._product.set(product);
+          this._hasError.set(false);
+        },
+        error: () => this._hasError.set(true),
+      });
+  }
+
+  deleteProduct(id: string) {
+    return this.clientService.deleteProduct(id).pipe(
+      tap({
+        next: () => {
+          this._product.set(null);
+          this._hasError.set(false);
+          const products = this._products();
+          if (products) {
+            this._products.set(products.filter((p) => p.id !== id));
+          }
+        },
+        error: () => this._hasError.set(true),
+      })
+    );
+  }
+}

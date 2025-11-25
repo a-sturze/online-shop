@@ -1,1 +1,3 @@
-<app-products-list-view [data]="data" />
+@if(productService.products(); as products){
+<app-products-list-view [data]="products" />
+}
