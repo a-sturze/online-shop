@@ -13,7 +13,8 @@ import { ProductsService } from '../../../services/products';
 import { FormGroup } from '@angular/forms';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
-import { createProductForm, FormMode } from './utils/form.utils';
+import { FormMode } from './enums/product-form.enum';
+import { createProductForm } from './utils/product-form.utils';
 
 @Component({
   selector: 'app-product-form',

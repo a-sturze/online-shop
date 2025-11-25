@@ -1,25 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-export enum FormMode {
-  Edit = 'edit',
-  Add = 'add',
-}
-
-interface ProductFormValues {
-  name: string;
-  category: string;
-  image: string;
-  price: number;
-  description: string;
-}
-
-interface ProductFormType {
-  name: FormControl<string>;
-  category: FormControl<string>;
-  image: FormControl<string>;
-  price: FormControl<number>;
-  description: FormControl<string>;
-}
+import { ProductFormValues, ProductFormType } from '../types/product-form';
 
 const productFormDefaults: ProductFormValues = {
   name: '',
