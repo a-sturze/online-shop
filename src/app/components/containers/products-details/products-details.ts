@@ -27,18 +27,11 @@ export class ProductsDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   protected readonly productService = inject(ProductsService);
-  private readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
   private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
-  protected readonly isAdmin = computed<boolean>(() => {
-    const user = this.authService.user();
-    if (user && user.roles.includes(Role.Admin)) {
-      return true;
-    }
-    return false;
-  });
 
   constructor() {
     effect(() => {

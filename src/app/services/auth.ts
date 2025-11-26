@@ -4,18 +4,34 @@ import { LoginFormType } from '../features/login/types/login-form';
 import { AuthClientService } from './auth-client';
 import { User } from '../types/users';
 import { Router } from '@angular/router';
+import { Role } from '../enums/role';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly TOKEN_KEY = 'token';
   private readonly clientService = inject(AuthClientService);
   private readonly router = inject(Router);
   private readonly _hasError = signal<boolean>(false);
-  private readonly token = signal<string | null>(localStorage.getItem('token'));
+  private readonly token = signal<string | null>(localStorage.getItem(this.TOKEN_KEY));
   private readonly _user = signal<User | null>(null);
 
   public readonly isAuthenticated = computed<boolean>(() => !!this.token());
+  public readonly isAdmin = computed<boolean>(() => {
+    const user = this._user();
+    if (user && user.roles.includes(Role.Admin)) {
+      return true;
+    }
+    return false;
+  });
+  public readonly isCustomer = computed<boolean>(() => {
+    const user = this._user();
+    if (user && user.roles.includes(Role.Customer)) {
+      return true;
+    }
+    return false;
+  });
 
   init(): Observable<void> {
     const token = this.token();
@@ -41,17 +57,17 @@ export class AuthService {
     return this._user.asReadonly();
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
+  public logout(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
     this.token.set(null);
     this._user.set(null);
     this.router.navigate(['/login']);
   }
 
-  login(loginData: LoginFormType): Observable<User> {
+  public login(loginData: LoginFormType): Observable<User> {
     return this.clientService.login(loginData).pipe(
       tap(({ access_token }) => {
-        localStorage.setItem('token', access_token);
+        localStorage.setItem(this.TOKEN_KEY, access_token);
         this.token.set(access_token);
         this._hasError.set(false);
       }),
@@ -62,7 +78,7 @@ export class AuthService {
     );
   }
 
-  getUserProfile(token: string) {
+  public getUserProfile(token: string): Observable<User> {
     return this.clientService.getUserProfile(token).pipe(
       tap({
         next: (reponse: User) => {

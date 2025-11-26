@@ -12,11 +12,11 @@ export class AuthClientService {
   private readonly http = inject(HttpClient);
   private readonly BASE_URL = `${environment.apiUrl}/auth`;
 
-  login(loginData: LoginFormType): Observable<{ access_token: string }> {
+  public login(loginData: LoginFormType): Observable<{ access_token: string }> {
     return this.http.post<{ access_token: string }>(`${this.BASE_URL}/login`, loginData);
   }
 
-  getUserProfile(token: string): Observable<User> {
+  public getUserProfile(token: string): Observable<User> {
     return this.http.get<User>(`${this.BASE_URL}/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });

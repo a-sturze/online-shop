@@ -15,23 +15,8 @@ import { AuthService } from '../../../services/auth';
 })
 export class ProductsList {
   private snackBar = inject(MatSnackBar);
-  private readonly authService = inject(AuthService);
+  protected readonly authService = inject(AuthService);
   protected readonly productService = inject(ProductsService);
-
-  protected readonly isAdmin = computed<boolean>(() => {
-    const user = this.authService.user();
-    if (user && user.roles.includes(Role.Admin)) {
-      return true;
-    }
-    return false;
-  });
-  protected readonly isCustomer = computed<boolean>(() => {
-    const user = this.authService.user();
-    if (user && user.roles.includes(Role.Customer)) {
-      return true;
-    }
-    return false;
-  });
 
   constructor() {
     effect(() => {

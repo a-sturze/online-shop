@@ -1,7 +1,7 @@
 import { inject, Injectable, Signal, signal } from '@angular/core';
 import { Product } from '../types/products';
 import { ProductsClientService } from './products-client';
-import { take, tap } from 'rxjs';
+import { Observable, take, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class ProductsService {
     return this._hasError.asReadonly();
   }
 
-  public getProducts() {
+  public getProducts(): void {
     this.clientService
       .getProducts()
       .pipe(take(1))
@@ -37,7 +37,7 @@ export class ProductsService {
       });
   }
 
-  getProductDetails(id: string) {
+  public getProductDetails(id: string): void {
     this.clientService
       .getProductDetails(id)
       .pipe(take(1))
@@ -50,7 +50,7 @@ export class ProductsService {
       });
   }
 
-  editProduct(product: Product) {
+  public editProduct(product: Product): Observable<Product> {
     return this.clientService.editProduct(product).pipe(
       tap({
         next: () => {
@@ -66,7 +66,7 @@ export class ProductsService {
     );
   }
 
-  createProduct(product: Product) {
+  public createProduct(product: Product): Observable<Product> {
     return this.clientService.createProduct(product).pipe(
       tap({
         next: (reponse: Product) => {
@@ -82,7 +82,7 @@ export class ProductsService {
     );
   }
 
-  deleteProduct(id: string) {
+  public deleteProduct(id: string): Observable<void> {
     return this.clientService.deleteProduct(id).pipe(
       tap({
         next: () => {

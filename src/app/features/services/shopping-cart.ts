@@ -12,7 +12,8 @@ export class ShoppingCartService {
   public get hasError(): Signal<boolean> {
     return this._hasError.asReadonly();
   }
-  checkout() {
+
+  public checkout(): void {
     const order = {
       customerId: 'de96921d-2f8d-46e7-8061-31468180de96',
       products: [
@@ -22,7 +23,7 @@ export class ShoppingCartService {
         },
       ],
     };
-    return this.clientService
+    this.clientService
       .checkout(order)
       .pipe(take(1))
       .subscribe({
