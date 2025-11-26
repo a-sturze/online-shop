@@ -14,6 +14,8 @@ import { RouterLink } from '@angular/router';
 })
 export class ProductsListView {
   public readonly data = input.required<Product[]>();
+  public readonly isAdmin = input.required<boolean>();
+  public readonly isCustomer = input.required<boolean>();
 
   protected readonly displayedColumns = ['category', 'name', 'price', 'actions'];
 

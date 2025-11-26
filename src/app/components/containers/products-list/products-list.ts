@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { ProductsListView } from '../../presentational/products-list-view/products-list-view';
 import { ProductsService } from '../../../services/products';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Role } from '../../../enums/role';
+import { AuthService } from '../../../services/auth';
 
 @Component({
   selector: 'app-products-list',
@@ -12,8 +14,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsList {
-  protected readonly productService = inject(ProductsService);
   private snackBar = inject(MatSnackBar);
+  protected readonly authService = inject(AuthService);
+  protected readonly productService = inject(ProductsService);
 
   constructor() {
     effect(() => {

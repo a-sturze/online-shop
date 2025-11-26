@@ -1,3 +1,7 @@
 @if (productService.product(); as product){
-<app-products-details-view [product]="product" (openDialog)="openDialog()" />
+<app-products-details-view
+  [product]="product"
+  (openDialog)="openDialog()"
+  [isAdmin]="authService.isAdmin()"
+/>
 }
