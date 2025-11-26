@@ -1,10 +1,11 @@
 <div class="flex justify-between">
   <h1 class="text-xl font-bold">Products</h1>
   <div class="flex gap-2">
-    <button matMiniFab aria-label="Details" routerLink="/cart">
-      <mat-icon>shopping_cart</mat-icon>
-    </button>
+    @if(isCustomer()){<button matMiniFab aria-label="Details" routerLink="/cart">
+      <mat-icon>shopping_cart</mat-icon></button
+    >} @if(isAdmin()){
     <button matButton="tonal" routerLink="/products/add">Add</button>
+    }
   </div>
 </div>
 <table mat-table [dataSource]="data()" class="mat-elevation-z8">

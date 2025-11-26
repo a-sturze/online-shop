@@ -1,3 +1,3 @@
 @if(productService.products(); as products){
-<app-products-list-view [data]="products" />
+<app-products-list-view [data]="products" [isAdmin]="isAdmin()" [isCustomer]="isCustomer()" />
 }

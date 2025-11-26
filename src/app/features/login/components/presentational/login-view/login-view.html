@@ -1,0 +1,29 @@
+<h2 class="text-xl font-bold text-center">Sign In</h2>
+<form class="py-3" [formGroup]="form()">
+  <div class="w-1/2 flex justify-center justify-self-center flex-col">
+    <mat-form-field>
+      <mat-label for="username">Username</mat-label>
+      <input id="username" matInput type="text" placeholder="Username" formControlName="username" />
+      @if (form().controls['username'].errors) {
+      <mat-error>Username is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label for="password">Password</mat-label>
+      <input
+        id="password"
+        matInput
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+      />@if (form().controls['password'].errors) {
+      <mat-error>Password is required</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="flex justify-around">
+    <button type="submit" matButton="filled" (click)="login.emit()" [disabled]="!form().valid">
+      Login
+    </button>
+  </div>
+</form>

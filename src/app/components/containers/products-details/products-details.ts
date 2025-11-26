@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+} from '@angular/core';
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../../services/products';
@@ -6,6 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../../presentational/delete-dialog/delete-dialog';
+import { AuthService } from '../../../services/auth';
+import { Role } from '../../../enums/role';
 
 @Component({
   selector: 'app-products-details',
@@ -18,10 +27,18 @@ export class ProductsDetails {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   protected readonly productService = inject(ProductsService);
+  private readonly authService = inject(AuthService);
   protected readonly productId = this.route.snapshot.paramMap.get('id') || '';
   private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dialog = inject(MatDialog);
+  protected readonly isAdmin = computed<boolean>(() => {
+    const user = this.authService.user();
+    if (user && user.roles.includes(Role.Admin)) {
+      return true;
+    }
+    return false;
+  });
 
   constructor() {
     effect(() => {
