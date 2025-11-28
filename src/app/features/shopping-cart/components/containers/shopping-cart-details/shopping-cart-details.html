@@ -1,1 +1,9 @@
-<app-shopping-cart-details-view [data]="data" (checkout)="checkout()" />
+@if(cartFacade.isLoading()){
+<app-loader />
+}@else{
+<app-shopping-cart-details-view
+  [data]="cartFacade.cartProducts()"
+  (checkout)="checkout()"
+  (removeProduct)="cartFacade.removeProductFromCart($event)"
+/>
+}

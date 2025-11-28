@@ -3,10 +3,10 @@
     <li><button matButton routerLink="/products">Home</button></li>
   </ul>
   <div class="flex justify-center items-center gap-2">
-    @if (authService.user();as user){
+    @if (authFacade.user(); as user){
     <span class="font-bold italic">{{ user.username }}</span>
     }
-    <button matIconButton aria-label="Logout" (click)="authService.logout()">
+    <button matIconButton aria-label="Logout" (click)="authFacade.logout()">
       <mat-icon>logout</mat-icon>
     </button>
   </div>

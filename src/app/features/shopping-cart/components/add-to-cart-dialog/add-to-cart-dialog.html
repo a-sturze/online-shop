@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Add to Cart</h2>
+<mat-dialog-content>
+  <p>
+    You are trying to add <span class="italic">{{ product() }}</span> to your cart. Please choose
+    the quantity below
+  </p>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Quantity</mat-label>
+      <input matInput [(ngModel)]="quantity" type="number" min="1" value="1" />
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="handleCancel()">Cancel</button>
+  <button matButton="filled" (click)="add()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

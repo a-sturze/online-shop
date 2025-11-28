@@ -1,7 +1,8 @@
-@if (productService.product(); as product){
+@if(productsFacade.isLoading()){ <app-loader />} @else{ @if (productsFacade.currentProduct(); as
+product){
 <app-products-details-view
   [product]="product"
-  (openDialog)="openDialog()"
-  [isAdmin]="authService.isAdmin()"
+  (openDialog)="openDialog($event)"
+  [isAdmin]="authFacade.isAdmin()"
 />
-}
+} }

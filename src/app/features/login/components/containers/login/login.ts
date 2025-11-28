@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { LoginView } from '../../presentational/login-view/login-view';
 import { FormGroup } from '@angular/forms';
 import { createLoginForm } from '../../../utils/login.utils';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../../../services/auth';
+import { AuthFacade } from '../../../../../state/auth/auth.facade';
 
 @Component({
   selector: 'app-login',
@@ -15,15 +13,13 @@ import { AuthService } from '../../../../../services/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {
-  private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly destroyRef = inject(DestroyRef);
-  protected readonly authService = inject(AuthService);
   protected readonly loginForm: FormGroup = createLoginForm();
+  private readonly authFacade = inject(AuthFacade);
 
   constructor() {
     effect(() => {
-      if (this.authService.hasError()) {
+      if (this.authFacade.error()) {
         this.snackBar.open('Incorrect username or password', 'Close', { verticalPosition: 'top' });
       }
     });
@@ -36,11 +32,6 @@ export class Login {
       });
       return;
     }
-    this.authService
-      .login(this.loginForm.value)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.router.navigate(['/products']);
-      });
+    this.authFacade.login(this.loginForm.value);
   }
 }
