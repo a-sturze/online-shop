@@ -3,7 +3,7 @@
   <div class="flex gap-2">
     @if(isAdmin()){
     <button matButton="tonal" [routerLink]="['/products/edit/', product().id]">Edit</button>
-    <button matButton="filled" (click)="openDialog.emit()">Delete</button>}
+    <button matButton="filled" (click)="openDialog.emit(product().name)">Delete</button>}
   </div>
 </div>
 <div class="grid grid-cols-4 gap-x-4 gap-y-2">

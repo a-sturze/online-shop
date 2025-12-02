@@ -1,10 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
-import { AuthService } from '../services/auth';
+import { AuthFacade } from '../state/auth/auth.facade';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  if (authService.isAuthenticated()) {
+  const authFacade = inject(AuthFacade);
+
+  if (authFacade.isAuthenticated()) {
     return true;
   }
   return createUrlTreeFromSnapshot(route, ['/login']);

@@ -14,5 +14,5 @@ import { User } from '../../../types/users';
 export class ProductsDetailsView {
   public readonly product = input.required<Product>();
   public readonly isAdmin = input.required<boolean>();
-  public readonly openDialog = output<void>();
+  public readonly openDialog = output<string>();
 }

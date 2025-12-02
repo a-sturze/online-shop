@@ -1,31 +1,40 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
-import { cartProducts } from '../../../../../mocks/cart';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ShoppingCartDetailsView } from '../../presentational/shopping-cart-details-view/shopping-cart-details-view';
-import { CartProduct } from '../../../../shared/types/product';
-import { ShoppingCartService } from '../../../../services/shopping-cart';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { filter } from 'rxjs';
+import { Loader } from '../../../../../components/shared/loader/loader';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthFacade } from '../../../../../state/auth/auth.facade';
+import { CartFacade } from '../../../../../state/cart/cart.facade';
 
 @Component({
   selector: 'app-shopping-cart-details',
-  imports: [ShoppingCartDetailsView],
+  imports: [ShoppingCartDetailsView, Loader],
   templateUrl: './shopping-cart-details.html',
   styleUrl: './shopping-cart-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShoppingCartDetails {
-  protected readonly data: CartProduct[] = cartProducts;
-  private readonly cartService = inject(ShoppingCartService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly authFacade = inject(AuthFacade);
+  protected readonly cartFacade = inject(CartFacade);
 
   constructor() {
-    effect(() => {
-      if (this.cartService.hasError()) {
-        this.snackBar.open('Could not place order', 'Close', { verticalPosition: 'top' });
-      }
-    });
+    this.cartFacade.error$
+      .pipe(
+        takeUntilDestroyed(),
+        filter((error) => !!error)
+      )
+      .subscribe(() => {
+        this.snackBar.open('Could not load cart products', 'Close', { verticalPosition: 'top' });
+      });
   }
 
   checkout() {
-    this.cartService.checkout();
+    const user = this.authFacade.user();
+    if (!user) {
+      return;
+    }
+    this.cartFacade.checkoutCart(user.id);
   }
 }

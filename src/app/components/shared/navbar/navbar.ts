@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../../services/auth';
 import { RouterLink } from '@angular/router';
+import { AuthFacade } from '../../../state/auth/auth.facade';
 
 @Component({
   selector: 'app-navbar',
@@ -12,5 +12,5 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Navbar {
-  protected readonly authService = inject(AuthService);
+  protected readonly authFacade = inject(AuthFacade);
 }

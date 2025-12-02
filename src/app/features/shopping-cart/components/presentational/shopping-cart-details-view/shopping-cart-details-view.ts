@@ -14,10 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 export class ShoppingCartDetailsView {
   public readonly data = input.required<Product[]>();
   public readonly checkout = output<void>();
+  public readonly removeProduct = output<string>();
 
   protected readonly displayedColumns = ['category', 'name', 'price', 'quantity', 'actions'];
-
-  handleDelete = (id: string) => {
-    console.log(id);
-  };
 }

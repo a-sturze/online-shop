@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './components/shared/navbar/navbar';
-import { AuthService } from './services/auth';
+import { AuthFacade } from './state/auth/auth.facade';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +11,5 @@ import { AuthService } from './services/auth';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly authService = inject(AuthService);
-  protected readonly title = signal('online-shop');
+  protected readonly authFacade = inject(AuthFacade);
 }

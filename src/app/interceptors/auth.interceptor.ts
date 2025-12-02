@@ -1,19 +1,18 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, of } from 'rxjs';
-import { AuthService } from '../services/auth';
+import { catchError, throwError } from 'rxjs';
+import { AuthFacade } from '../state/auth/auth.facade';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
-  const router = inject(Router);
-  const authService = inject(AuthService);
+  const authFacade = inject(AuthFacade);
+
   return next(req).pipe(
     catchError((error) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        authService.logout();
-        router.navigate(['/login']);
+        authFacade.logout();
       }
-      return of(error);
+
+      return throwError(() => error);
     })
   );
 }

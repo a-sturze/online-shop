@@ -1,7 +1,9 @@
-@if(productService.products(); as products){
+@if(productsFacade.isLoading()){ <app-loader />} @else{ @if((productsFacade.allProducts()); as
+products){
 <app-products-list-view
   [data]="products"
-  [isAdmin]="authService.isAdmin()"
-  [isCustomer]="authService.isCustomer()"
+  [isAdmin]="authFacade.isAdmin()"
+  [isCustomer]="authFacade.isCustomer()"
+  (addToCart)="addToCart($event)"
 />
-}
+} }

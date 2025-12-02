@@ -1,36 +1,17 @@
-import { inject, Injectable, Signal, signal } from '@angular/core';
-import { ShoppingCartClientService } from './shopping-cart-client';
-import { take } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { Order } from '../shared/types/order';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShoppingCartService {
-  private readonly clientService = inject(ShoppingCartClientService);
-  private readonly _hasError = signal<boolean>(false);
+  private readonly http = inject(HttpClient);
+  private readonly BASE_URL = environment.apiUrl;
 
-  public get hasError(): Signal<boolean> {
-    return this._hasError.asReadonly();
-  }
-
-  public checkout(): void {
-    const order = {
-      customerId: 'de96921d-2f8d-46e7-8061-31468180de96',
-      products: [
-        {
-          productId: 'caf385cd-4b16-49dd-ae35-e1fa5b02c412',
-          quantity: 3,
-        },
-      ],
-    };
-    this.clientService
-      .checkout(order)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          this._hasError.set(false);
-        },
-        error: () => this._hasError.set(true),
-      });
+  public checkout(order: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.BASE_URL}/orders`, order);
   }
 }
