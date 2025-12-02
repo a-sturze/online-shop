@@ -8,36 +8,49 @@ import {
 } from './cart.actions';
 import { CartProduct } from '../../features/shared/types/product';
 import { logout } from '../auth/auth.actions';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 
-export interface CartState {
-  cartProducts: CartProduct[];
+//using ngrx entity for the cart store
+export interface CartState extends EntityState<CartProduct> {
   error: string | null;
   loading: boolean;
 }
-export const initialState: CartState = {
-  cartProducts: [],
+
+export function selectId(a: CartProduct): string {
+  return a.id;
+}
+
+export function sortByName(a: CartProduct, b: CartProduct): number {
+  return a.name.localeCompare(b.name);
+}
+
+export const adapter: EntityAdapter<CartProduct> = createEntityAdapter<CartProduct>({
+  selectId: selectId,
+  sortComparer: sortByName,
+});
+
+export const initialState: CartState = adapter.getInitialState({
   error: null,
   loading: false,
-};
+});
 
 export const cartReducer = createReducer(
   initialState,
   on(addProductToCart, (state, product) => {
-    const found = state.cartProducts.find((p) => p.id === product.id);
-    if (!found) return { ...state, cartProducts: [...state.cartProducts, product] };
-    return {
-      ...state,
-      cartProducts: state.cartProducts.map((p) =>
-        p.id === product.id ? { ...p, quantity: p.quantity + product.quantity } : p
-      ),
-    };
+    const found = state.entities[product.id];
+    if (!found) {
+      return adapter.addOne(product, state);
+    }
+    return adapter.updateOne(
+      { id: product.id, changes: { quantity: found.quantity + product.quantity } },
+      state
+    );
   }),
-  on(removeProductFromCart, (state, { id }) => ({
-    ...state,
-    cartProducts: state.cartProducts.filter((p) => p.id !== id),
-  })),
+  on(removeProductFromCart, (state, { id }) => {
+    return adapter.removeOne(id, state);
+  }),
   on(checkoutCart, (state) => ({ ...state, loading: true, error: null })),
-  on(checkoutCartSuccess, (state) => ({ ...state, cartProducts: [], loading: false })),
+  on(checkoutCartSuccess, () => initialState),
   on(checkoutCartError, (state, { error }) => ({
     ...state,
     error: error,
@@ -45,3 +58,7 @@ export const cartReducer = createReducer(
   })),
   on(logout, () => initialState)
 );
+
+const { selectAll } = adapter.getSelectors();
+
+export const selectCartProducts = selectAll;
