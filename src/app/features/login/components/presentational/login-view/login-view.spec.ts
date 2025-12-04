@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginView } from './login-view';
+import { createLoginForm } from '../../../utils/login.utils';
 
 describe('LoginView', () => {
   let component: LoginView;
@@ -8,12 +9,13 @@ describe('LoginView', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginView]
-    })
-    .compileComponents();
+      imports: [LoginView],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LoginView);
     component = fixture.componentInstance;
+    const form = createLoginForm();
+    fixture.componentRef.setInput('form', form);
     fixture.detectChanges();
   });
 

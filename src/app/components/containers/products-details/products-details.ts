@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular
 import { ProductsDetailsView } from '../../presentational/products-details-view/products-details-view';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialog } from '../../presentational/delete-dialog/delete-dialog';
 import { filter } from 'rxjs';
@@ -37,6 +37,7 @@ export class ProductsDetails {
         this.snackBar.open('Could not load product', 'Close', { verticalPosition: 'top' })
       );
   }
+
   ngOnInit() {
     this.productsFacade.loadProductDetails(this.productId);
   }
@@ -46,14 +47,14 @@ export class ProductsDetails {
       width: '250px',
       data: { product: productName },
     });
-
     dialogRef
       .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result !== undefined) {
-          this.productsFacade.deleteProduct(this.productsFacade.currentProduct()?.id || '');
-        }
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((result) => !!result)
+      )
+      .subscribe(() => {
+        this.productsFacade.deleteProduct(this.productsFacade.currentProduct()?.id || '');
       });
   }
 }

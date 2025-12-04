@@ -1,6 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Login } from './login';
+import { Store } from '@ngrx/store';
+import { of } from 'rxjs';
+
+const mockStore = {
+  select: (selector: any) => of('mockedValue'),
+  dispatch: jasmine.createSpy('dispatch'),
+};
 
 describe('Login', () => {
   let component: Login;
@@ -8,9 +15,9 @@ describe('Login', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Login]
-    })
-    .compileComponents();
+      imports: [Login],
+      providers: [{ provide: Store, useValue: mockStore }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
