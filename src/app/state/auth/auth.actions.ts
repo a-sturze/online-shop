@@ -4,7 +4,8 @@ import { User } from '../../types/users';
 
 export const login = createAction('[Login Page] Login', props<LoginFormValues>());
 
-export const loginSuccess = createAction('[Products Page] Load Login Success', props<User>());
+export const loginSuccess = createAction('[Login Page] Login Success', props<{ user: User }>());
+
 export const loginError = createAction('[Login Page] Login Error', props<{ error: string }>());
 
 export const logout = createAction('[Login Page] Logout');

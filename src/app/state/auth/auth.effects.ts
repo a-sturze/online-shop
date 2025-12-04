@@ -30,7 +30,7 @@ export class AuthEffects {
             localStorage.setItem(this.TOKEN_KEY, access_token);
           }),
           switchMap(({ access_token }) => this.authClient.getUserProfile(access_token)),
-          map((user) => loginSuccess(user)),
+          map((user) => loginSuccess({ user })),
           catchError((error) => of(loginError({ error: error.message })))
         )
       )
